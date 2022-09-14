@@ -1,0 +1,66 @@
+@font-face {
+    font-family: "GOST type B";
+    srs:url('../fonts/gosttypeb.ttf')
+}
+
+
+td, table {
+
+
+
+}
+td {
+    text-align: center;
+    vertical-align: top;
+
+}
+td:hover{
+    border-color: red;
+
+
+}
+html {
+    font-family: "GOST type B","Courier New","sans-serif";
+
+}
+.footer{
+    background: gray;
+}
+
+body{
+    background: linear-gradient(45deg, rgba(103, 0, 31, .8), rgba(34, 101, 163, .5));
+
+
+}
+svg line{
+    stroke: blue;
+    stroke-width: 2;
+}
+
+.graphContainer {
+    background: aliceblue;
+    opacity: 0.6;
+}
+
+.submit {
+
+    background-color: red;
+    color: black;
+    transition-property: background-color,color,border-radius;
+    transition-duration: 0.5s;
+    transition-timing-function: ease;
+
+}
+.submit:hover{
+    background-color: blue;
+    color:white;
+    border-radius: 10px;
+}
+.param-table{
+    height: 150px;
+
+}
+
+.output-table{
+    width: 100%;
+}

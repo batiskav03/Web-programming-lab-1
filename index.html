@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <table width="100%">
+        <tr>
+            <td class="footer" colspan="3" align="center">
+                Калабухов Максим Александрович
+                <p>P32131</p>
+                <p>Вариант 1212 (custom)</p>
+            </td>
+
+        </tr>
+        <tr>
+            <td id="graphicContainer" class="graphContainer">
+
+            </td>
+            <td>
+                <table class="main-table" width="100%">
+                    <tr>
+                        <td width="50%" class="param-table">
+                            <div>Выберите координату X:</div>
+                            <p>
+                            <input type="button" value="-3" class="xnumber">
+                            <input type="button" value="-2" class="xnumber">
+                            <input type="button" value="-1" class="xnumber">
+                            <input type="button" value="0" class="xnumber">
+                            <input type="button" value="1" class="xnumber">
+                            <input type="button" value="2" class="xnumber">
+                            <input type="button" value="3" class="xnumber">
+                            <input type="button" value="4" class="xnumber">
+                            <input type="button" value="5" class="xnumber">
+                            </p>
+                        </td>
+                        <td width="50%" class="param-table">
+                            <div>
+                                Выберите координату Y:
+                                <p>
+                                    <input type="text" class="ynumber" id="y">
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" >
+                            <input type="button" value="submit" class="submit">
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+
+        </tr>
+        <tr>
+            <td colspan="3" height="250">
+                <table class="output-table">Последние результаты:</table>
+            </td>
+        </tr>
+    </table>
+    <script src="http://d3js.org/d3.v3.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
