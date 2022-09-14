@@ -3,8 +3,8 @@ session_start();
 
 $host = "localhost";
 $database = "dots_php";
-$username = "postgres";
-$password = "3361";
+$username = "****";
+$password = "****";
 
 $dbconn = pg_connect("host=$host port=5432 dbname=$database user=$username password=$password");
 
