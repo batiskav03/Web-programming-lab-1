@@ -12,6 +12,7 @@ inputY.addEventListener("change", (elem) => {y = elem.target.value})
 submit_button.addEventListener("click",submit_data)
 
 function submit_data (){
+    validate_x();
     fetch("/php/script.php/?" + "x=" + x + "&y=" + y)
         .then(response => response.text())
         .then(responseText => {
@@ -19,13 +20,18 @@ function submit_data (){
         })
 }
 
+function validate_x(){
+    if ($.isNumeric(x) && $.isNumeric(y)) {
+            console.log("suqess")
+    }
 
+}
 
-var width = 400,
+let width = 400,
     height = 400;
 
-d3.select("td.graphContainer")
-    .append("svg")
+d3 = d3.select("td.graphContainer")
+    d3.append("svg")
     .attr("height",height)
     .attr("width",width)
     .append("line")

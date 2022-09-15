@@ -64,3 +64,8 @@ svg line{
 .output-table{
     width: 100%;
 }
+
+.axis path, .axis line {
+    fill: none;
+    stroke: steelblue;
+}

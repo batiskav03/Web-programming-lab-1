@@ -3,18 +3,19 @@ session_start();
 
 $host = "localhost";
 $database = "dots_php";
-$username = "****";
-$password = "****";
-
+$username = "postgres";
+$password = "3361";
 $dbconn = pg_connect("host=$host port=5432 dbname=$database user=$username password=$password");
+
 
 if (!$dbconn) {
     die("Could not connect");
 } else {
     echo "Connection to local DB";
 }
-
-
+if (!isset($_SESSION["dots"])) {
+    $_SESSION["dots"] = [[]];
+}
 
 //date_default_timezone_set("Europe/Moscow");
 //$x = $_GET["x"];
