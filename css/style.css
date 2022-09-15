@@ -3,10 +3,11 @@
     srs:url('../fonts/gosttypeb.ttf')
 }
 
+canvas {
+    border: 3px solid gray;
+}
 
 td, table {
-
-    border: 1px solid gray;
 
 }
 td {

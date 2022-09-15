@@ -25,33 +25,80 @@ function submit_data (){
 }
 
 function validate_data(){
-    if ($.isNumeric(x) && $.isNumeric(y)) {
-        return true;
-    } else {
-        return false;
-    }
+    return ($.isNumeric(x) && $.isNumeric(y));
 
 }
 
-let width = 400,
-    height = 400;
+const WIDTH = 700
+const HEIGHT = 400
+const DPI_WIDTH = WIDTH * 2
+const DPI_HEIGHT = HEIGHT * 2
+const ROWS_COUNT = 10
+const PADDING = 40
+// рабочая область
+const VIEW_HEIGHT = DPI_HEIGHT - PADDING * 2
+const STEP = VIEW_HEIGHT / ROWS_COUNT
 
-d3 = d3.select("td.graphContainer")
-    d3.append("svg")
-    .attr("height",height)
-    .attr("width",width)
-    .append("line")
-    .attr("x1",30)
-    .attr("y2",30)
-    .attr("x2",300)
-    .attr("y2",300)
+function graph(canvas) {
+    const ctx = canvas.getContext("2d")
+    canvas.style.width = WIDTH + "px"
+    canvas.style.height = HEIGHT + "px"
+    canvas.width = DPI_WIDTH
+    canvas.height = DPI_HEIGHT
+    // линии по y
+        ctx.beginPath()
+    ctx.strokeStyle = "#bbb";
+    // отрисока "сеточки"
+    ctx.font = "normal 20px GOST type B"
+    ctx.fillStyle = "#96a2aa"
 
+        for (let i = 1; i <= ROWS_COUNT; i++) {
+            const y = STEP * i
+            ctx.moveTo(0, y + PADDING);
+            ctx.lineTo(DPI_WIDTH, y + PADDING)
+            ctx.fillText(DPI_HEIGHT - y,0,y + PADDING)
+        }
+        ctx.stroke()
+        ctx.closePath()
 
+    // отрисовываем ограничение сверху
+    ctx.beginPath()
+    ctx.lineWidth = 5
+    ctx.strokeStyle = "red";
+    for (let i = 0; i < 1400; i+=0.2) {
+        ctx.lineTo(i,DPI_HEIGHT - PADDING - (Math.sin(i/120)*20 + 600))
+    }
+    ctx.stroke()
+    ctx.closePath()
 
+    // отрисовываем ограничение снизу
+    ctx.beginPath()
+    ctx.lineWidth = 5
+    ctx.strokeStyle = "red";
+    for (let i = 0; i < 1400; i+=0.2) {
+        ctx.lineTo(i,DPI_HEIGHT - PADDING -(Math.sin(i/100)*50 + 200))
+    }
+    ctx.stroke()
+    ctx.closePath()
+}
 
+graph(document.getElementById("graph"))
 
+function drawPoint(canvas) {
+    const ctx = canvas.getContext("2d");
+    ctx.beginPath()
+    ctx.fillStyle = "blue";
+    ctx.fillRect(500,DPI_HEIGHT - PADDING - 300,5,5)
+    ctx.fill()
+}
+drawPoint(document.getElementById("graph"))
 
-
+fetch("/php/tradingDots.php")
+    .then(response => response.text())
+    .then(responseJson => console.log(responseJson))
+fetch("/php/tradingDots.php")
+    .then(response => response.text())
+    .then(responseJson => console.log(responseJson))
 
 
 
