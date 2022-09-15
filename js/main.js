@@ -12,17 +12,23 @@ inputY.addEventListener("change", (elem) => {y = elem.target.value})
 submit_button.addEventListener("click",submit_data)
 
 function submit_data (){
-    validate_x();
+    if (validate_data()) {
     fetch("/php/script.php/?" + "x=" + x + "&y=" + y)
         .then(response => response.text())
         .then(responseText => {
             document.querySelector(".output-table").innerHTML = responseText;
         })
+    } else {
+        document.querySelector(".wrong_data").innerHTML = "Данные введены некоректно";
+        setTimeout(() =>{document.querySelector(".wrong_data").innerHTML = ""} ,5000);
+    }
 }
 
-function validate_x(){
+function validate_data(){
     if ($.isNumeric(x) && $.isNumeric(y)) {
-            console.log("suqess")
+        return true;
+    } else {
+        return false;
     }
 
 }

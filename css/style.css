@@ -6,7 +6,7 @@
 
 td, table {
 
-
+    border: 1px solid gray;
 
 }
 td {
@@ -68,4 +68,9 @@ svg line{
 .axis path, .axis line {
     fill: none;
     stroke: steelblue;
+}
+
+.wrong_data{
+    background-color: brown;
+    font-weight: bold;
 }
