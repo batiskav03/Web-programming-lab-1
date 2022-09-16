@@ -6,7 +6,7 @@ session_start();
 $host = "localhost";
 $database = "dots_php";
 $username = "postgres";
-$password = "****";
+$password = "3361";
 $dbconn = pg_connect("host=$host port=5432 dbname=$database user=$username password=$password");
 
 
@@ -31,9 +31,9 @@ if (empty($_SESSION["flag"])){
 }
 $_SESSION['flag'] = 1;
 
-$key = array_rand($_SESSION["dots"]);
-echo json_encode($_SESSION["dots"][$key]);
-//\array_splice($_SESSION["dots"],$key,1);
+
+echo json_encode($_SESSION["dots"]);
+
 
 
 

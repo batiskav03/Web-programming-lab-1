@@ -84,22 +84,41 @@ function graph(canvas) {
 
 graph(document.getElementById("graph"))
 
-function drawPoint(canvas) {
+function drawPoint(canvas,x,y) {
     const ctx = canvas.getContext("2d");
     ctx.beginPath()
     ctx.fillStyle = "blue";
-    ctx.fillRect(500,DPI_HEIGHT - PADDING - 300,5,5)
+    ctx.fillRect(x,DPI_HEIGHT - PADDING - y,5,5)
     ctx.fill()
 }
-drawPoint(document.getElementById("graph"))
 
+
+
+let bigData = [];
 fetch("/php/tradingDots.php")
     .then(response => response.text())
-    .then(responseJson => console.log(responseJson))
-fetch("/php/tradingDots.php")
-    .then(response => response.text())
-    .then(responseJson => console.log(responseJson))
+    .then(responseJson => {
+        let arr = responseJson.split("},{")
+        for (str of arr) {
+            newarr = Array.from(str.split(',').toString().split(":").toString().split(","))
+            newarr.splice([0],1)
+            newarr.splice([1],1)
+            newarr[0] = newarr[0].replace(/['"]+/g,'')
+            if (typeof newarr[1] === "string")
+                newarr[1] = newarr[1].replace(/['"]+/g,'')
+
+            bigData.push(newarr)
 
 
+        }
+
+    })
+setInterval(() => {
+    x = Number(bigData[0][0]);
+    y = Number(bigData[0][1]);
+    bigData.splice([0],1)
+
+    drawPoint(document.getElementById("graph"),x,y)
+},0.1)
 
 
