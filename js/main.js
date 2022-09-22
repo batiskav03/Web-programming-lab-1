@@ -1,19 +1,30 @@
 let x_absolute,y_absolute
-let xLimit = 300
+let leftLimit = 300
+let rightLimit = 600
+let x
 let inputX = document.querySelector(".xnumber")
 let inputY = document.querySelector(".ynumber")
 let submit_button = document.querySelector(".submit")
-let range = document.querySelector(".range")
+let leftRange = document.querySelector(".xLeftlimit")
+let rightRange = document.querySelector(".xRightlimit")
+
 
 // все слушатели(почти)
 inputX.addEventListener("change", (elem) => {x_absolute = elem.target.value})
 inputY.addEventListener("change", (elem) => {y_absolute = elem.target.value})
 submit_button.addEventListener("click",submit_data)
-range.addEventListener("input",(e) => {
-    xLimit = e.target.value
-    document.querySelector(".xlimit").innerHTML = "Область прорисовки по X:   " + xLimit
-
+leftRange.addEventListener("input",(e) => {
+    leftLimit = e.target.value
+    document.querySelector(".leftLabel").innerHTML = "Область прорисовки по X:   " + leftLimit
 })
+rightRange.addEventListener("input", (e) => {
+    rightLimit = e.target.value;
+    document.querySelector(".rightLabel").innerHTML = "Область прорисовки X:" + rightLimit
+})
+
+
+
+
 
 // отправка данных на сервер
 function submit_data (){
@@ -37,7 +48,7 @@ function submit_data (){
 // проверка правильности введенных данных:
 //      - на случай если человек решил удалить кнопки, и не кликнул на одну из них - страница перезагружаеться
 function validate_data(){
-    if (typeof x_absolute == "undefined" && typeof y_absolute == "undefined"){
+    if (!x_absolute  || !y_absolute){
         location.reload()
     }
     else {
@@ -153,24 +164,7 @@ function graphExt() {
     }
     return [max,min]
 }
-// забираю массив точек из БД
-fetch("/php/tradingDots.php")
-    .then(response => response.text())
-    .then(responseJson => {
-        let arr = responseJson.split("},{")
-        for (str of arr) {
-            newarr = Array.from(str.split(',').toString().split(":").toString().split(","))
-            newarr.splice([0],1)
-            newarr.splice([1],1)
-            newarr[0] = newarr[0].replace(/['"]+/g,'')
-            if (typeof newarr[1] === "string")
-                newarr[1] = newarr[1].replace(/['"]+/g,'')
-            bigData.push(newarr)
 
-
-
-        }
-    })
 
 // прорисовывание пользовательских точек
 setTimeout(() => {
@@ -178,15 +172,37 @@ setTimeout(() => {
         x = Number(bigData[0][0])
         y = Number(bigData[0][1])
         let item = bigData.splice([0],1)
-        if (y <= (Math.sin(x/120)*20 + 600) && y >= (Math.sin(x/100)*50 + 200) && x <= xLimit ){
+        if (y <= (Math.sin(x/120)*20 + 600) && y >= (Math.sin(x/100)*50 + 200) && x >= leftLimit && x <= rightLimit){
             drawPoint(document.getElementById("graph"),x,y,5,5,"blue")
         }  else if (y <= (Math.sin(x/120)*20 + 600) && y >= (Math.sin(x/100)*50 + 200)) {
-            bigData.push(item)
+            drawPoint(document.getElementById("graph"),x,y,5,5,"green")
         }
     },0.1)
-},220);
+},3);
 
-
+// забираю массив точек из БД
+function checkAndUpload () {
+    setTimeout( () => {
+        if (bigData.length === 0){
+            fetch("/php/tradingDots.php" + "?leftLimit=" + leftLimit + "&rightLimit=" + rightLimit)
+                .then(response => response.text())
+                .then(responseJson => {
+                    let arr = responseJson.split("},{")
+                    for (str of arr) {
+                        newarr = Array.from(str.split(',').toString().split(":").toString().split(","))
+                        newarr.splice([0],1)
+                        newarr.splice([1],1)
+                        newarr[0] = newarr[0].replace(/['"]+/g,'')
+                        if (typeof newarr[1] === "string")
+                            newarr[1] = newarr[1].replace(/['"]+/g,'')
+                        bigData.push(newarr)
+                    }
+                })
+        }
+        checkAndUpload();
+    },10)
+}
+checkAndUpload();
 graph(document.getElementById("graph"))
 
 

@@ -83,7 +83,7 @@ svg line{
     vertical-align: auto;
 }
 
-.range {
+.xLeftlimit, .xRightlimit {
     width: 700px;
 }
 
@@ -93,4 +93,7 @@ svg line{
     margin-left: 265px;
 }
 
-.xlimit {}
+.xLeftlimit {}
+.xRightlimit {}
+.leftLabel {}
+.rightLabel {}

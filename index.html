@@ -19,13 +19,17 @@
             <td id="graphicContainer" class="graphContainer">
                 <canvas id="graph"></canvas>
                 <p>
-                    <input class="range" type="range" min="0" max="1400" value="300" >
+                    <input class="xLeftlimit" type="range" min="0" max="1400" value="300" >
                 </p>
                 <div>
-                    <label class="xlimit">Область прорисовки по X:</label>
-
+                    <label class="leftLabel">Область прорисовки по X (все что левее - не прорисовываеться):</label>
                 </div>
-
+                <p>
+                    <input class="xRightlimit" type="range" min="0" max="1400" value="600" >
+                </p>
+                <div>
+                    <label class="rightLabel">Область прорисовки по X (все что правее - не прорисовываеться):</label>
+                </div>
             </td>
             <td>
                 <table class="main-table" width="100%">
