@@ -9,7 +9,11 @@ let range = document.querySelector(".range")
 inputX.addEventListener("change", (elem) => {x_absolute = elem.target.value})
 inputY.addEventListener("change", (elem) => {y_absolute = elem.target.value})
 submit_button.addEventListener("click",submit_data)
-range.addEventListener("change",(e) => xLimit = e.target.value)
+range.addEventListener("input",(e) => {
+    xLimit = e.target.value
+    document.querySelector(".xlimit").innerHTML = "Область прорисовки по X:   " + xLimit
+
+})
 
 // отправка данных на сервер
 function submit_data (){
@@ -40,6 +44,7 @@ function validate_data(){
         return ($.isNumeric(x_absolute) && $.isNumeric(y_absolute))
     }
 }
+
 
 
 // данные для работы с canvas
@@ -119,7 +124,6 @@ function graph(canvas) {
     ctx.closePath()
 }
 
-
 // точка(квадрат)
 function drawPoint(canvas,x,y,weight,height,color) {
     const ctx = canvas.getContext("2d")
@@ -133,37 +137,6 @@ function drawPoint(canvas,x,y,weight,height,color) {
 // получение информации с сервера и дальнейщий ее парсинг
 let bigData = [] // массив со всеми точками из БД
 
-fetch("/php/tradingDots.php")
-    .then(response => response.text())
-    .then(responseJson => {
-        let arr = responseJson.split("},{")
-        for (str of arr) {
-            newarr = Array.from(str.split(',').toString().split(":").toString().split(","))
-            newarr.splice([0],1)
-            newarr.splice([1],1)
-            newarr[0] = newarr[0].replace(/['"]+/g,'')
-            if (typeof newarr[1] === "string")
-                newarr[1] = newarr[1].replace(/['"]+/g,'')
-            bigData.push(newarr)
-
-
-
-        }
-
-    })
-// прорисовывание пользовательских точек
-setTimeout(() => {
-    setInterval(() => {
-        x = Number(bigData[0][0])
-        y = Number(bigData[0][1])
-        let item = bigData.splice([0],1)
-        if (y <= (Math.sin(x/120)*20 + 600) && y >= (Math.sin(x/100)*50 + 200) && x <= xLimit ){
-            drawPoint(document.getElementById("graph"),x,y,5,5,"blue")
-        }  else if (y <= (Math.sin(x/120)*20 + 600) && y >= (Math.sin(x/100)*50 + 200)) {
-            bigData.push(item)
-        }
-    },0.1)
-},220);
 
 
 // вычисление минимального и максимального значения функции (extremum's)
@@ -180,6 +153,39 @@ function graphExt() {
     }
     return [max,min]
 }
+// забираю массив точек из БД
+fetch("/php/tradingDots.php")
+    .then(response => response.text())
+    .then(responseJson => {
+        let arr = responseJson.split("},{")
+        for (str of arr) {
+            newarr = Array.from(str.split(',').toString().split(":").toString().split(","))
+            newarr.splice([0],1)
+            newarr.splice([1],1)
+            newarr[0] = newarr[0].replace(/['"]+/g,'')
+            if (typeof newarr[1] === "string")
+                newarr[1] = newarr[1].replace(/['"]+/g,'')
+            bigData.push(newarr)
+
+
+
+        }
+    })
+
+// прорисовывание пользовательских точек
+setTimeout(() => {
+    setInterval(() => {
+        x = Number(bigData[0][0])
+        y = Number(bigData[0][1])
+        let item = bigData.splice([0],1)
+        if (y <= (Math.sin(x/120)*20 + 600) && y >= (Math.sin(x/100)*50 + 200) && x <= xLimit ){
+            drawPoint(document.getElementById("graph"),x,y,5,5,"blue")
+        }  else if (y <= (Math.sin(x/120)*20 + 600) && y >= (Math.sin(x/100)*50 + 200)) {
+            bigData.push(item)
+        }
+    },0.1)
+},220);
+
 
 graph(document.getElementById("graph"))
 
