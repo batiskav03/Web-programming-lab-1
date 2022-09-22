@@ -1,14 +1,12 @@
 let x_absolute,y_absolute
 let xLimit = 300
-let inputX = document.querySelectorAll(".xnumber")
+let inputX = document.querySelector(".xnumber")
 let inputY = document.querySelector(".ynumber")
 let submit_button = document.querySelector(".submit")
 let range = document.querySelector(".range")
 
 // все слушатели(почти)
-inputX.forEach((item) => {
-    item.addEventListener("click", (elem) => x_absolute = elem.target.value)
-})
+inputX.addEventListener("change", (elem) => {x_absolute = elem.target.value})
 inputY.addEventListener("change", (elem) => {y_absolute = elem.target.value})
 submit_button.addEventListener("click",submit_data)
 range.addEventListener("change",(e) => xLimit = e.target.value)
@@ -16,11 +14,15 @@ range.addEventListener("change",(e) => xLimit = e.target.value)
 // отправка данных на сервер
 function submit_data (){
     if (validate_data()) {
-    fetch("/php/script.php/?" + "x_absolute=" + x_absolute + "&y_absolute=" + y_absolute)
+    fetch("/php/script.php/?" + "x_absolute=" + x_absolute + "&y_absolute=" + y_absolute + "&request=get_from_DB")
         .then(response => response.text())
         .then(responseText => {
             document.querySelector(".output-table").innerHTML = responseText
-            drawPoint(document.getElementById("graph"),x_absolute,y_absolute,"red")
+            if (y <= (Math.sin(x/120)*20 + 600) && y >= (Math.sin(x/100)*50 + 200)) {
+                drawPoint(document.getElementById("graph"), x_absolute, y_absolute,10,10, "red")
+            }
+            fetch("/php/script.php/?" + "x_absolute=" + x_absolute + "&y_absolute=" + y_absolute + "&request=write_into_DB")
+
         })
     } else {
         document.querySelector(".wrong_data").innerHTML = "Данные введены некоректно"
@@ -92,7 +94,7 @@ function graph(canvas) {
             const x = STEP_ABSCISS * i
             ctx.moveTo(x, DPI_HEIGHT)
             ctx.lineTo(DPI_HEIGHT, x)
-            ctx.fillText(x, x, DPI_HEIGHT)
+            ctx.fillText(x.toString(), x, DPI_HEIGHT)
         }
         ctx.closePath()
 
@@ -119,11 +121,11 @@ function graph(canvas) {
 
 
 // точка(квадрат)
-function drawPoint(canvas,x,y,color) {
+function drawPoint(canvas,x,y,weight,height,color) {
     const ctx = canvas.getContext("2d")
     ctx.beginPath()
     ctx.fillStyle = color ;
-    ctx.fillRect(x,DPI_HEIGHT - PADDING - y,5,5)
+    ctx.fillRect(x,DPI_HEIGHT - PADDING - y,weight,height)
     ctx.fill()
 }
 
@@ -142,8 +144,8 @@ fetch("/php/tradingDots.php")
             newarr[0] = newarr[0].replace(/['"]+/g,'')
             if (typeof newarr[1] === "string")
                 newarr[1] = newarr[1].replace(/['"]+/g,'')
-
             bigData.push(newarr)
+
 
 
         }
@@ -156,7 +158,7 @@ setTimeout(() => {
         y = Number(bigData[0][1])
         let item = bigData.splice([0],1)
         if (y <= (Math.sin(x/120)*20 + 600) && y >= (Math.sin(x/100)*50 + 200) && x <= xLimit ){
-            drawPoint(document.getElementById("graph"),x,y,"blue")
+            drawPoint(document.getElementById("graph"),x,y,5,5,"blue")
         }  else if (y <= (Math.sin(x/120)*20 + 600) && y >= (Math.sin(x/100)*50 + 200)) {
             bigData.push(item)
         }
