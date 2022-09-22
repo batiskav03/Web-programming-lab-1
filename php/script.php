@@ -4,13 +4,13 @@ session_start();
 
 
 date_default_timezone_set("Europe/Moscow");
-$x = $_GET["x"];
-$y = $_GET["y"];
+$x = $_GET["x_absolute"];
+$y = $_GET["y_absolute"];
 $date = date("H:i:s");
 if (!isset($_SESSION["rows"])) {
     $_SESSION["rows"] = [];
 }
-if (isset($_GET["x"]) && isset($_GET["y"])); {
+if (isset($_GET["x_absolute"]) && isset($_GET["y_absolute"])); {
     $executionTime = microtime(true) - $_SERVER["REQUEST_TIME_FLOAT"];
     array_push($_SESSION["rows"],"<tr>
     <td>$x</td>
@@ -18,7 +18,7 @@ if (isset($_GET["x"]) && isset($_GET["y"])); {
     <td>$date</td>
     <td>$executionTime</td>
     </tr>");
-    echo "<table id='output-table'>x</table>
+    echo "<table id='output-table'></table>
         <tr>
             <th>x</th>
             <th>y</th>
